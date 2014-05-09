@@ -228,8 +228,8 @@ $empire=null; //注消操作类变量
 // 提示
 function Ue_Print($msg="SUCCESS"){
     echo '{"state": "'.$msg.'"}';
-    db_close(); //关闭MYSQL链接
-    $empire=null; //注消操作类变量
+    db_close();
+    $empire=null;
     exit();
 }
 // 列出已经上传的文件
