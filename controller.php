@@ -44,7 +44,7 @@ if(empty($action))
 {
     Ue_Print('请求类型不能明确');
 }
-else if(empty($classid)||empty($filepass)||empty($userid)||empty($username))
+else if(empty($classid)||empty($filepass))
 {
     Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass，会员ID：$userid，会员名称：$username");
 }
@@ -64,6 +64,28 @@ if(empty($isadmin)) // 重定义前台配置
     {
         Ue_Print("管理员关闭了会员上传图片功能");
     }
+	
+	$cr=$empire->fetch1("select openadd,qaddgroupid from {$dbtbpre}enewsclass where classid='$classid'");
+	if($cr['openadd']==1)
+	{
+        Ue_Print("栏目关闭了投稿功能");
+	}
+	else if($cr['qaddgroupid'])
+	{
+		if(empty($userid)||empty($username)||empty($rnd))
+		{
+			Ue_Print("请未登录");
+		}
+		$ur=$empire->fetch1("select userid,groupid from {$dbtbpre}enewsmember where userid='$userid' and username='$username' and rnd='$rnd'");
+		if(empty($ur['userid']))
+		{
+			Ue_Print("请重新未登录");
+		}
+		else if (!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
+		{
+			Ue_Print("您没有上传附件的权限");
+		}
+	}
     $qaddtransize = $pr['qaddtransize']*1024;
     $CONFIG['imageMaxSize'] = $qaddtransize;
     $CONFIG['scrawlMaxSize'] = $qaddtransize;
@@ -85,6 +107,15 @@ if(empty($isadmin)) // 重定义前台配置
 }
 else if($isadmin==1) // 重定义后台配置
 {
+	if(empty($userid)||empty($username)||empty($rnd))
+	{
+		Ue_Print("请未登录");
+	}
+	$ur=$empire->fetch1("select userid from {$dbtbpre}enewsuser where userid='$userid' and username='$username' and rnd='$rnd'");
+	if(empty($ur['userid']))
+	{
+		Ue_Print("请重新未登录");
+	}
     $filesize = $pr['filesize']*1024;
     $CONFIG['imageMaxSize'] = $filesize;
     $CONFIG['scrawlMaxSize'] = $filesize;
@@ -191,7 +222,6 @@ if (isset($_GET["callback"])) {
     echo $result;
 }
 
-
 db_close(); //关闭MYSQL链接
 $empire=null; //注消操作类变量
 
@@ -202,6 +232,7 @@ function Ue_Print($msg="SUCCESS"){
     $empire=null; //注消操作类变量
     exit();
 }
+// 列出已经上传的文件
 function action_list($classid,$username){
 	global $empire,$public_r,$class_r,$dbtbpre;
 	
