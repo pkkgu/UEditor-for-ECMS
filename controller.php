@@ -4,8 +4,9 @@
  * controller.php
  * UEditor1.4.0未发布正试版本，我会持续更新
  * pkkgu 910111100@qq.com
- *  2014年5月9日 15:46:27
+ * 2014年5月9日 15:46:27
 
+	前台需要传的参数
 	ue.ready(function(){
 		ue.execCommand('serverparam', {
 			'classid': '<?=$classid?>',
@@ -36,11 +37,18 @@ $username    = RepPostVar($_GET['username']);
 $rnd         = RepPostVar($_GET['rnd']);
 $loginin     = $isadmin?$username:'[Member]'.$username;
 
+
+//测试参数
+$classid     = 15;
+$filepass    = 11;
+$isadmin     = 1; // 0前台 1后台
+$userid      = 1;
+$username    = "admin";
+
+
 // 配置
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
 
-
-$isadmin     = (int)$_POST['isadmin']; // 0前台 1后台
 if(empty($action))
 {
     Ue_Print('请求类型不能明确');
@@ -49,8 +57,9 @@ else if(empty($classid)||empty($filepass)||empty($userid)||empty($username))
 {
     Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass，会员ID：$userid，会员名称：$username");
 }
+//获取配置
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
-if(empty($isadmin)) // 前台
+if(empty($isadmin)) // 重定义前台配置
 {
     if($pr['addnews_ok']==1)
     {
@@ -83,7 +92,7 @@ if(empty($isadmin)) // 前台
     $CONFIG['fileManagerAllowFiles'] = $qaddtranfiletype;
     $CONFIG['videoAllowFiles'] = array(".flv",".swf",".mkv",".avi",".rm",".rmvb",".mpeg",".mpg",".ogg",".ogv",".mov",".wmv",".mp4",".webm",".mp3",".wav",".mid");
 }
-else if($isadmin==1) // 后台
+else if($isadmin==1) // 重定义后台配置
 {
     $filesize = $pr['filesize']*1024;
     $CONFIG['imageMaxSize'] = $filesize;
@@ -93,91 +102,96 @@ else if($isadmin==1) // 后台
     $CONFIG['videoMaxSize'] = $filesize;
 }
 
-    //目录
-    $classpath   = ReturnFileSavePath($classid); //栏目附件目录
-    $timepath    = "/".$classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
-    // 重定义存放目录
-    $CONFIG['imagePathFormat']      = $timepath;
-    $CONFIG['scrawlPathFormat']     = $timepath;
-    $CONFIG['videoPathFormat']      = $timepath;
-    $CONFIG['filePathFormat']       = $timepath;
-    $CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
-    $CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
-    $CONFIG['catcherPathFormat']    = $timepath;
-    
-    switch ($action) {
-        case 'config':
-            $result = json_encode($CONFIG);
-            break;
-    
-        /* 上传图片 */
-        case 'uploadimage':
-            $type=1;
-            $result = include("action_upload.php");
-            break;
-    
-        /* 上传涂鸦 */
-        case 'uploadscrawl':
-            $type=1;
-            $result = include("action_upload.php");
-            break;
-    
-        /* 上传视频 */
-        case 'uploadvideo':
-            $type=3;
-            $result = include("action_upload.php");
-            break;
-    
-        /* 上传文件 */
-        case 'uploadfile':
-            $type=0;
-            $result = include("action_upload.php");
-            break;
-    
-        /* 列出图片 */
-        case 'listimage':
-            $result = include("action_list.php");
-            break;
-        /* 列出文件 */
-        case 'listfile':
-            $result = include("action_list.php");
-            break;
-    
-        /* 抓取远程文件 */
-        case 'catchimage':
-            $type=1;
-            $result = include("action_crawler.php");
-            break;
-    
-        default:
-            $result = json_encode(array('state'=> '请求地址出错'));
-            break;
-    }
+//目录
+$classpath   = ReturnFileSavePath($classid); //栏目附件目录
+$timepath    = "/".$classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
+// 重定义存放目录
+$CONFIG['imagePathFormat']      = $timepath;
+$CONFIG['scrawlPathFormat']     = $timepath;
+$CONFIG['videoPathFormat']      = $timepath;
+$CONFIG['filePathFormat']       = $timepath;
+$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
+$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
+$CONFIG['catcherPathFormat']    = $timepath;
 
-    // 文件名、文件大小，存放日期目录，上传者，栏目id,文件编号,文件类型,信息ID,文件临时识别编号(原文件名称),文件存放目录方式,信息公共ID,归属类型,附件副表ID
-    // 文件类型:1为图片，2为Flash文件，3为多媒体文件，0为附件
-    // 归属类型:0信息，4反馈，5公共，6会员，其他
-    // 文件临时识别编号:0非垃圾信息
-    // 文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
-    
-    //写入数据库
-    $file_r   = json_decode($result,true);
-    if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile")&&$file_r['state']=="SUCCESS")
-    {
-        $title    = RepPostStr(trim($file_r[title]));
-        $filesize = (int)$file_r[size];
-        $filepath = date("Y-m-d");
-        $username = RepPostStr(trim($username));
-        $loginin  = $isadmin?$username:'[Member]'.$username;        
-        $classid  = (int)$classid;
-        $original = RepPostStr(trim($file_r[original]));
-        $type     = (int)$type;
-        $filepass = (int)$filepass;
-        eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
+switch ($action) {
+	case 'config':
+		$result = json_encode($CONFIG);
+		break;
 
-        // 反馈附件入库
-        //eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
-    }
+	/* 上传图片 */
+	case 'uploadimage':
+		$type=1;
+		$result = include("action_upload.php");
+		break;
+
+	/* 上传涂鸦 */
+	case 'uploadscrawl':
+		$type=1;
+		$result = include("action_upload.php");
+		break;
+
+	/* 上传视频 */
+	case 'uploadvideo':
+		$type=3;
+		$result = include("action_upload.php");
+		break;
+
+	/* 上传文件 */
+	case 'uploadfile':
+		$type=0;
+		$result = include("action_upload.php");
+		break;
+
+	/* 列出图片 */
+	case 'listimage':
+		$result = action_list($classid,$username);
+		//$result = include("action_list.php");
+		break;
+	/* 列出文件 */
+	case 'listfile':
+		$result = action_list($classid,$username);
+		//$result = include("action_list.php");
+		break;
+
+	/* 抓取远程文件 */
+	case 'catchimage':
+		$type=1;
+		$result = include("action_crawler.php");
+		break;
+
+	default:
+		$result = json_encode(array('state'=> '请求地址出错'));
+		break;
+}
+
+/*
+ * eInsertFileTable(文件名、文件大小，存放日期目录，上传者，栏目id,文件编号,文件类型,信息ID,文件临时识别编号(原文件名称),文件存放目录方式,信息公共ID,归属类型,附件副表ID)
+ * 1.文件类型:1为图片，2为Flash文件，3为多媒体文件，0为附件
+ * 2.归属类型:0信息，4反馈，5公共，6会员，其他
+ * 3.文件临时识别编号:0非垃圾信息
+ * 4.文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
+ *
+ */
+
+//写入数据库
+$file_r   = json_decode($result,true);
+if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile")&&$file_r['state']=="SUCCESS")
+{
+	$title    = RepPostStr(trim($file_r[title]));
+	$filesize = (int)$file_r[size];
+	$filepath = date("Y-m-d");
+	$username = RepPostStr(trim($username));
+	$loginin  = $isadmin?$username:'[Member]'.$username;        
+	$classid  = (int)$classid;
+	$original = RepPostStr(trim($file_r[original]));
+	$type     = (int)$type;
+	$filepass = (int)$filepass;
+	eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
+
+	// 反馈附件入库
+	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
+}
 
 /* 输出结果 */
 if (isset($_GET["callback"])) {
@@ -196,4 +210,55 @@ function Ue_Print($msg="SUCCESS"){
     db_close(); //关闭MYSQL链接
     $empire=null; //注消操作类变量
     exit();
+}
+function action_list($classid,$username){
+	global $empire,$public_r,$class_r,$dbtbpre;
+	
+	$action=$_GET['action'];
+	$list=array();
+	$result = json_encode(array("state" => "no match file","list" => $list,"start" => 0,"total" => 0));
+	
+	$where = '';
+	if($action=='listimage') //图片
+	{
+		$where = ' and type=1';
+	}
+	else if($action=='listfile') //附件
+	{
+		$where = ' and type!=1';
+	}
+	else
+	{
+		return $result;
+	}
+	
+	$size=(int)$_GET['size'];
+	$size=$size?$size:20;
+	$start=(int)$_GET['start'];
+	$limit=$start.",".$size;
+	// 统计总数
+	$total=$empire->gettotal("select count(*) as total from {$dbtbpre}enewsfile_1 where adduser='$username'".$where);
+	$sql=$empire->query("select * from {$dbtbpre}enewsfile_1 where adduser='$username'".$where." limit ".$limit);
+	$bqno=0;
+	while($r=$empire->fetch($sql))
+	{
+		$classpath = ReturnFileSavePath($classid);
+		$list[$bqno]['url'] = '/'.$classpath['filepath'].$r['path'].'/'.$r['filename'];
+		$list[$bqno]['mtime'] =$r['filetime'];
+		$bqno++;
+	}
+	/* 返回数据 */
+	if (!count($list)) {
+		return $result;
+	}
+	else
+	{
+		$state="SUCCESS";
+	}
+	return $result = json_encode(array(
+		"state" => $state,
+		"list" => $list,
+		"start" => $start,
+		"total" => $total
+	));
 }
