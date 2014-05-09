@@ -219,7 +219,7 @@ function action_list($classid,$username){
 	$result = json_encode(array("state" => "no match file","list" => $list,"start" => 0,"total" => 0));
 	
 	$where = '';
-	if($action=='listimage') //图片
+	if($action=='listimage') //图片 
 	{
 		$where = ' and type=1';
 	}
