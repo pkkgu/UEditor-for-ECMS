@@ -37,15 +37,6 @@ $username    = RepPostVar($_GET['username']);
 $rnd         = RepPostVar($_GET['rnd']);
 $loginin     = $isadmin?$username:'[Member]'.$username;
 
-
-//测试参数
-$classid     = 15;
-$filepass    = 11;
-$isadmin     = 1; // 0前台 1后台
-$userid      = 1;
-$username    = "admin";
-
-
 // 配置
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
 
