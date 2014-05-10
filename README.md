@@ -5,11 +5,8 @@ ECMS-for-UEditor
 百度编辑器UEditor 1.4.0
 
 ### 一、文件说明
-1.controller.php 后端处理文件
-
-2.Field_html.php 帝国CMS字端HTML
-- 接入验证 （初级权限）
-- 自动回复（文本、图片、语音、视频、音乐、图文）（初级权限）
+- controller.php 后端处理文件
+- Field_html.php 帝国CMS字端HTML
 ### 二、使用说明
 
 ```php
