@@ -1,23 +1,53 @@
 <?php
-/*
- * ECMS7.0 for UEditor1.4.0 develop
- * controller.php
- * UEditor1.4.0未发布正试版本，我会持续更新
- * pkkgu 910111100@qq.com
- * 2014年5月9日 15:46:27
-
-	前台需要传的参数
-	ue.ready(function(){
-		ue.execCommand('serverparam', {
-			'classid': '<?=$classid?>',
-			'filepass': '<?=$filepass?>',
-			'isadmin': '<?=$isadmin?>', //0前台 1后台
-			'userid': '<?=$userid?>',
-			'username': '<?=$username?>',
-			'rnd': '<?=$rnd?>'
+/**
+ * ECMS for UEditor 所有附件上传处理文件
+ * User: pkkgu 910111100@qq.com
+ * Date: 2014年5月10日 09:49:24
+ * ECMS 7.0
+ * UEditor 1.4.0 develop
+ *
+ * @param $classid   int
+ * @param $filepass  int    增加信息时为时间戳，修改信息为信息ID
+ * @param $isadmin   int    前后台控制,0前台、1后台
+ * @param $userid    int
+ * @param $username  string
+ * @param $rnd       string
+ *
+ * @param $Field     string 字段名称
+ * @param $FieldVal  string 字段内容
+ *
+	
+	帝国数据表 字段HTML
+	
+	<?php if(empty($Field)){ ?>
+	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
+	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
+	<script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
+	<?php } ?>
+	<?php
+	
+	$isadmin  = 1;  // 0前台，1后台
+	$Field    = 'newstext';
+	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
+	if(empty($isadmin)&&empty($ecmsfirstpost)) // 前台修改信息时
+	{
+		$FieldVal=DoReqValue($mid,$Field,$FieldVal);
+	}
+	?>
+	<script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
+	<script type="text/javascript">
+		var editor = UE.getEditor('<?=$Field?>');
+		ue.ready(function(){
+			ue.execCommand('serverparam', {
+				'classid' : '<?=$classid?>',
+				'filepass': '<?=$filepass?>',
+				'isadmin' : '<?=$isadmin?>',
+				'userid'  : '<?=$logininid?>',
+				'username': '<?=$loginin?>',
+				'rnd'     : '<?=$loginrnd?>'
+			});
 		});
-	});
-
+	</script>
  */
 require('../../../class/connect.php'); //引入数据库配置文件和公共函数文件
 require('../../../class/db_sql.php'); //引入数据库操作文件
