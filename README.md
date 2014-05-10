@@ -10,7 +10,8 @@ ECMS-for-UEditor
 
 ### 二、使用说明
 
-```<?php if(empty($Field)){ ?>
+```php
+<?php if(empty($Field)){ ?>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
