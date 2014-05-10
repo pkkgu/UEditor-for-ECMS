@@ -5,8 +5,9 @@
 <?php } ?>
 <?php
 /**
- * User: pkkgu 910111100@qq.com
  * ECMS UEditor编辑器字段配置
+ * User: pkkgu 910111100@qq.com
+ * Date: 2014年5月10日
  *
  * @param $isadmin  int    前后台控制
  * @param $Field    string 字段名称
@@ -16,9 +17,12 @@
 $isadmin  = 1; //0前台，1后台
 $Field    = 'newstext';
 $FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
-if(empty($isadmin)&&empty($ecmsfirstpost)) //前台修改信息时
+if(empty($isadmin))
 {
-	$FieldVal=DoReqValue($mid,$Field,$FieldVal);
+	$logininid = $muserid;
+	$loginin   = $musername;
+	$loginrnd  = $mrnd;
+	$FieldVal = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
 }
 ?>
 <script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>

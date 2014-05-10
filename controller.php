@@ -2,7 +2,7 @@
 /**
  * ECMS for UEditor 所有附件上传处理文件
  * User: pkkgu 910111100@qq.com
- * Date: 2014年5月10日 09:49:24
+ * Date: 2014年5月10日
  * ECMS 7.0
  * UEditor 1.4.0 develop
  *
@@ -18,20 +18,21 @@
  *
 	
 	帝国数据表 字段HTML
-	
 	<?php if(empty($Field)){ ?>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
 	<?php } ?>
 	<?php
-	
-	$isadmin  = 1;  // 0前台，1后台
+	$isadmin  = 1; //0前台，1后台
 	$Field    = 'newstext';
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
-	if(empty($isadmin)&&empty($ecmsfirstpost)) // 前台修改信息时
+	if(empty($isadmin))
 	{
-		$FieldVal=DoReqValue($mid,$Field,$FieldVal);
+		$logininid = $muserid;
+		$loginin   = $musername;
+		$loginrnd  = $mrnd;
+		$FieldVal = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
 	}
 	?>
 	<script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
@@ -252,8 +253,9 @@ if (isset($_GET["callback"])) {
     echo $result;
 }
 
-db_close(); //关闭MYSQL链接
-$empire=null; //注消操作类变量
+db_close();
+$empire=null;
+exit();
 
 // 提示
 function Ue_Print($msg="SUCCESS"){
