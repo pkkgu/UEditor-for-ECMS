@@ -163,8 +163,8 @@ $CONFIG['imagePathFormat']      = $timepath;
 $CONFIG['scrawlPathFormat']     = $timepath;
 $CONFIG['videoPathFormat']      = $timepath;
 $CONFIG['filePathFormat']       = $timepath;
-$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
-$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
+//$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
+//$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
 $CONFIG['catcherPathFormat']    = $timepath;
 
 switch ($action) {
@@ -267,7 +267,6 @@ function Ue_Print($msg="SUCCESS"){
 // 列出已经上传的文件
 function action_list($classid,$username){
 	global $empire,$public_r,$class_r,$dbtbpre;
-	
 	$action=$_GET['action'];
 	$list=array();
 	$result = json_encode(array("state" => "no match file","list" => $list,"start" => 0,"total" => 0));
@@ -285,7 +284,6 @@ function action_list($classid,$username){
 	{
 		return $result;
 	}
-	
 	$size=(int)$_GET['size'];
 	$size=$size?$size:20;
 	$start=(int)$_GET['start'];
