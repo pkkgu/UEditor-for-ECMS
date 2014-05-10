@@ -1,13 +1,11 @@
 ECMS-for-UEditor
 ================
 
-帝国ECMS7.0
-百度编辑器UEditor 1.4.0
+帝国ECMS7.0深度整合百度编辑器UEditor 1.4.0
 
-### 一、文件说明
-- controller.php 后端处理文件
-- Field_html.php 帝国CMS字端HTML
-### 二、使用说明
+### 下载编辑器https://github.com/fex-team/ueditor/releases
+### 上传到帝国/e/extend/目录下
+### 修改帝国编辑器字端HTML（注意$isadmin前后台配置）
 
 ```php
 <?php if(empty($Field)){ ?>
@@ -51,3 +49,7 @@ if(empty($isadmin))
 		});
 	});
 </script>```
+
+### 二、文件说明
+- controller.php 后端处理文件
+- Field_html.php 帝国CMS字端HTML
