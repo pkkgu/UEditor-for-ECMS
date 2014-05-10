@@ -50,8 +50,9 @@ if(empty($isadmin))
 			'rnd'     : '<?=$loginrnd?>'
 		});
 	});
-</script>```
+</script>
+```
 
-### 二、文件说明
+### 文件说明
 - controller.php 后端处理文件
 - Field_html.php 帝国CMS字端HTML
