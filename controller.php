@@ -77,7 +77,7 @@ if(empty($action))
 }
 else if(empty($classid)||empty($filepass))
 {
-    Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass，会员ID：$userid，会员名称：$username");
+    Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass");
 }
 //获取配置
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
@@ -257,7 +257,7 @@ db_close();
 $empire=null;
 exit();
 
-// 提示
+// Error提示
 function Ue_Print($msg="SUCCESS"){
     echo '{"state": "'.$msg.'"}';
     db_close();
