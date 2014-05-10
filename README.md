@@ -3,9 +3,11 @@ ECMS-for-UEditor
 
 帝国ECMS7.0深度整合百度编辑器UEditor 1.4.0
 
-### 下载编辑器https://github.com/fex-team/ueditor/releases
-### 上传到帝国/e/extend/目录下
-### 修改帝国编辑器字端HTML（注意$isadmin前后台配置）
+### 使用说明
+
+- 下载编辑器https://github.com/fex-team/ueditor/releases
+- 上传到帝国/e/extend/目录下
+- 修改帝国编辑器字端HTML（注意$isadmin前后台配置）
 
 ```php
 <?php if(empty($Field)){ ?>
