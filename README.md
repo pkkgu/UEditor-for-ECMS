@@ -8,8 +8,7 @@ ECMS-for-UEditor
 - 下载编辑器https://github.com/fex-team/ueditor/releases
 - 上传到帝国/e/extend/目录下
 - 使用本项目上的controller.php文件，替换编辑器自带的PHP文件，目录/e/extend/ueditor/php/controller.php
-- 修改帝国编辑器字端HTML（注意$isadmin前后台配置）
-- 目前只支持utf-8编码
+- 修改帝国编辑器字端HTML，替换为以下代码（注意$isadmin前后台配置）
 
 ```php
 <?php if(empty($Field)){ ?>
@@ -55,6 +54,7 @@ if(empty($isadmin))
 </script>
 ```
 
-### 文件说明
+### 说明
 - controller.php 后端处理文件
 - Field_html.php 帝国CMS字端HTML
+- 目前只支持utf-8编码
