@@ -7,12 +7,6 @@
 /**
  * ECMS UEditor编辑器字段配置
  * User: pkkgu 910111100@qq.com
- * Date: 2014年5月10日
- *
- * @param $isadmin  int    前后台控制
- * @param $Field    string 字段名称
- * @param $FieldVal string 字段内容
- *
  */
 $isadmin  = 1; //0前台，1后台
 $Field    = 'newstext';
