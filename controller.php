@@ -101,7 +101,7 @@ if(empty($isadmin)) // 重定义前台配置
 	{
         Ue_Print("栏目关闭了投稿功能");
 	}
-	else if($cr['qaddgroupid'])
+	else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //list文件、上传权限检测
 	{
 		if(empty($userid)||empty($username)||empty($rnd))
 		{
@@ -112,7 +112,7 @@ if(empty($isadmin)) // 重定义前台配置
 		{
 			Ue_Print("请重新未登录");
 		}
-		else if (!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
+		if ($cr['qaddgroupid']&&!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
 		{
 			Ue_Print("您没有上传附件的权限");
 		}
