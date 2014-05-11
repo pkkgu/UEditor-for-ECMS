@@ -16,23 +16,25 @@ if(empty($isadmin))
 	$logininid = $muserid;
 	$loginin   = $musername;
 	$loginrnd  = $mrnd;
-	$FieldVal = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
+	$FieldVal  = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
 }
 ?>
 <script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
 <script type="text/javascript">
-	var editor = UE.getEditor('<?=$Field?>');
-	ue.ready(function(){
-		ue.execCommand('serverparam', {
-			'classid' : '<?=$classid?>',
-			'filepass': '<?=$filepass?>',
-			'isadmin' : '<?=$isadmin?>',
-			'userid'  : '<?=$logininid?>',
-			'username': '<?=$loginin?>',
-			'rnd'     : '<?=$loginrnd?>'
-		});
+var editor = UE.getEditor('<?=$Field?>',{
+		// 分页符
+		pageBreakTag:'[!--empirenews.page--]'
+		//这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
+		//，toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']]
 	});
+ue.ready(function(){
+	ue.execCommand('serverparam', {
+		'classid' : '<?=$classid?>',
+		'filepass': '<?=$filepass?>',
+		'isadmin' : '<?=$isadmin?>',
+		'userid'  : '<?=$logininid?>',
+		'username': '<?=$loginin?>',
+		'rnd'     : '<?=$loginrnd?>'
+	});
+});
 </script>
-
-
-
