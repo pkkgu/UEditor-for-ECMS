@@ -165,7 +165,7 @@ $CONFIG['videoPathFormat']  = $timepath;
 $CONFIG['filePathFormat']   = $timepath;
 //$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
 //$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
-$CONFIG['catcherPathFormat']    = $timepath;
+$CONFIG['catcherPathFormat']= $timepath;
 
 switch ($action) {
 	case 'config':
@@ -283,7 +283,6 @@ function action_list($classid,$username){
 		return $result;
 	}
 	$size=(int)$_GET['size'];
-	$size=$size?$size:20;
 	$start=(int)$_GET['start'];
 	$limit=$start.",".$size;
 	// 统计总数
@@ -301,12 +300,8 @@ function action_list($classid,$username){
 	if (!count($list)) {
 		return $result;
 	}
-	else
-	{
-		$state="SUCCESS";
-	}
 	return $result = json_encode(array(
-		"state" => $state,
+		"state" => "SUCCESS",
 		"list" => $list,
 		"start" => $start,
 		"total" => $total
