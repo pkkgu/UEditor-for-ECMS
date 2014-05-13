@@ -23,7 +23,7 @@ ECMS-for-UEditor
 $isadmin  = 1; //0前台，1后台
 $Field    = 'newstext';
 $FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
-if(empty($isadmin))
+if(!isset($isadmin))
 {
 	$logininid = $muserid;
 	$loginin   = $musername;
