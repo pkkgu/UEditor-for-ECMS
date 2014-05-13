@@ -18,7 +18,7 @@
  *
 	
 	帝国数据表 字段HTML
-	<?php if(empty($Field)){ ?>
+	<?php if(!isset($Field)){ ?>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
@@ -85,21 +85,21 @@ if(empty($isadmin)) // 重定义前台配置
 {
     if($pr['addnews_ok']==1)
     {
-        Ue_Print("管理员关闭了投稿功能");
+        Ue_Print("网站投稿功能未开启");
     }
     else if(($action=='uploadimage'||$action=='uploadscrawl'||$action=='catchimage')&&empty($pr['qaddtran']))
     {
-        Ue_Print("管理员关闭了会员上传图片功能");
+        Ue_Print("图片上传功能关闭");
     }
     else if(($action=='uploadvideo'||$action=='uploadfile')&&empty($pr['qaddtranfile']))
     {
-        Ue_Print("管理员关闭了会员上传图片功能");
+        Ue_Print("附件上传功能关闭");
     }
 	
 	$cr=$empire->fetch1("select openadd,qaddgroupid from {$dbtbpre}enewsclass where classid='$classid'");
 	if($cr['openadd']==1)
 	{
-        Ue_Print("栏目关闭了投稿功能");
+        Ue_Print("栏目关闭投稿功能");
 	}
 	else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //list文件、上传权限检测
 	{
@@ -156,13 +156,13 @@ else if($isadmin==1) // 重定义后台配置
 }
 
 //目录
-$classpath   = ReturnFileSavePath($classid); //栏目附件目录
-$timepath    = "/".$classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
+$classpath = ReturnFileSavePath($classid); //栏目附件目录
+$timepath  = "/".$classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
 // 重定义存放目录
-$CONFIG['imagePathFormat']      = $timepath;
-$CONFIG['scrawlPathFormat']     = $timepath;
-$CONFIG['videoPathFormat']      = $timepath;
-$CONFIG['filePathFormat']       = $timepath;
+$CONFIG['imagePathFormat']  = $timepath;
+$CONFIG['scrawlPathFormat'] = $timepath;
+$CONFIG['videoPathFormat']  = $timepath;
+$CONFIG['filePathFormat']   = $timepath;
 //$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
 //$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
 $CONFIG['catcherPathFormat']    = $timepath;
@@ -219,6 +219,7 @@ switch ($action) {
 }
 
 /*
+ * 写入数据库
  * eInsertFileTable(文件名、文件大小，存放日期目录，上传者，栏目id,文件编号,文件类型,信息ID,文件临时识别编号(原文件名称),文件存放目录方式,信息公共ID,归属类型,附件副表ID)
  * 1.文件类型:1为图片，2为Flash文件，3为多媒体文件，0为附件
  * 2.归属类型:0信息，4反馈，5公共，6会员，其他
@@ -226,8 +227,6 @@ switch ($action) {
  * 4.文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
  *
  */
-
-//写入数据库
 $file_r   = json_decode($result,true);
 if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile")&&$file_r['state']=="SUCCESS")
 {
@@ -241,7 +240,6 @@ if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$ac
 	$type     = (int)$type;
 	$filepass = (int)$filepass;
 	eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
-
 	// 反馈附件入库
 	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
 }

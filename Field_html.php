@@ -1,4 +1,4 @@
-<?php if(empty($Field)){ ?>
+<?php if(isset($Field)){ ?>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
