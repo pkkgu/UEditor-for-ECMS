@@ -10,7 +10,7 @@ ECMS-for-UEditor
 - 使用本项目上的controller.php文件，替换编辑器自带的PHP文件，目录/e/extend/ueditor/php/controller.php
 - 修改帝国编辑器字端HTML，替换为以下代码（注意$isadmin前后台配置）
 ```php
-<?php if(empty($Field)){ ?>
+<?php if(!isset($Field)){ ?>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 <script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
@@ -20,33 +20,28 @@ ECMS-for-UEditor
  * ECMS UEditor编辑器字段配置
  * User: pkkgu 910111100@qq.com
  */
-$isadmin  = 1; //0前台，1后台
 $Field    = 'newstext';
 $FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
-if(!isset($isadmin))
-{
-	$logininid = $muserid;
-	$loginin   = $musername;
-	$loginrnd  = $mrnd;
-	$FieldVal  = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
-}
+$isadmin  = 0;
+if($enews=='AddNews'||$enews=='EditNews')
+{ $isadmin=1; }
+else
+{ $FieldVal  = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field]; }
 ?>
 <script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
 <script type="text/javascript">
 var editor = UE.getEditor('<?=$Field?>',{
-		// 分页符
-		pageBreakTag:'[!--empirenews.page--]'
-		//这里可以选择自己需要的工具按钮名称,此处仅选择如下五个
-		//，toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']]
+		pageBreakTag:'[!--empirenews.page--]' // 分页符
+		//，toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']] //选择自己需要的工具按钮名称
 	});
 ue.ready(function(){
 	ue.execCommand('serverparam', {
 		'classid' : '<?=$classid?>',
 		'filepass': '<?=$filepass?>',
 		'isadmin' : '<?=$isadmin?>',
-		'userid'  : '<?=$logininid?>',
-		'username': '<?=$loginin?>',
-		'rnd'     : '<?=$loginrnd?>'
+		'userid'  : '<?=$isadmin?$logininid:$muserid?>',
+		'username': '<?=$isadmin?$loginin:$musername?>',
+		'rnd'     : '<?=$isadmin?$loginrnd:$mrnd?>'
 	});
 });
 </script>

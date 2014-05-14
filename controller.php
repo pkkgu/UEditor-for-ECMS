@@ -24,30 +24,30 @@
 	<script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
 	<?php } ?>
 	<?php
-	$isadmin  = 1; //0前台，1后台
 	$Field    = 'newstext';
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
-	if(empty($isadmin))
-	{
-		$logininid = $muserid;
-		$loginin   = $musername;
-		$loginrnd  = $mrnd;
-		$FieldVal = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field];
-	}
+	$isadmin  = 0;
+	if($enews=='AddNews'||$enews=='EditNews')
+	{ $isadmin=1; }
+	else
+	{ $FieldVal  = empty($ecmsfirstpost)?DoReqValue($mid,$Field,$FieldVal):$r[$Field]; }
 	?>
 	<script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
 	<script type="text/javascript">
-		var editor = UE.getEditor('<?=$Field?>');
-		ue.ready(function(){
-			ue.execCommand('serverparam', {
-				'classid' : '<?=$classid?>',
-				'filepass': '<?=$filepass?>',
-				'isadmin' : '<?=$isadmin?>',
-				'userid'  : '<?=$logininid?>',
-				'username': '<?=$loginin?>',
-				'rnd'     : '<?=$loginrnd?>'
-			});
+	var editor = UE.getEditor('<?=$Field?>',{
+			pageBreakTag:'[!--empirenews.page--]' // 分页符
+			//，toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']] //选择自己需要的工具按钮名称
 		});
+	ue.ready(function(){
+		ue.execCommand('serverparam', {
+			'classid' : '<?=$classid?>',
+			'filepass': '<?=$filepass?>',
+			'isadmin' : '<?=$isadmin?>',
+			'userid'  : '<?=$isadmin?$logininid:$muserid?>',
+			'username': '<?=$isadmin?$loginin:$musername?>',
+			'rnd'     : '<?=$isadmin?$loginrnd:$mrnd?>'
+		});
+	});
 	</script>
  */
 require('../../../class/connect.php'); //引入数据库配置文件和公共函数文件
