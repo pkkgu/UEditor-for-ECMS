@@ -7,7 +7,7 @@
  * ECMS UEditor编辑器字段配置
  * User: pkkgu 910111100@qq.com
  */
-$Field    = 'newstext';  // *字段名称
+$Field    = 'newstext'; //*字段名称
 $FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
 $isadmin  = 0;
 if($enews=='AddNews'||$enews=='EditNews')

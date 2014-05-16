@@ -23,7 +23,7 @@
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 	<?php } ?>
 	<?php
-	$Field    = 'newstext'; // *字段名称
+	$Field    = 'newstext'; //*字段名称
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
 	$isadmin  = 0;
 	if($enews=='AddNews'||$enews=='EditNews')
@@ -72,9 +72,9 @@ if(empty($action))
 {
     Ue_Print('请求类型不能明确');
 }
-else if(empty($classid)||empty($filepass))
+else if($action!='config'&&(empty($classid)||empty($filepass)))
 {
-    Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass");
+    Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass，action：$action");
 }
 //获取配置
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
@@ -154,7 +154,7 @@ else if($isadmin==1) // 重定义后台配置
 
 //目录
 $classpath = ReturnFileSavePath($classid); //栏目附件目录
-$timepath  = "/".$classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
+$timepath  = $classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
 // 重定义存放目录
 $CONFIG['imagePathFormat']  = $timepath;
 $CONFIG['scrawlPathFormat'] = $timepath;
@@ -173,24 +173,28 @@ switch ($action) {
 	case 'uploadimage':
 		$type=1;
 		$result = include("action_upload.php");
+		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传涂鸦 */
 	case 'uploadscrawl':
 		$type=1;
 		$result = include("action_upload.php");
+		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传视频 */
 	case 'uploadvideo':
 		$type=3;
 		$result = include("action_upload.php");
+		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传文件 */
 	case 'uploadfile':
 		$type=0;
 		$result = include("action_upload.php");
+		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 列出图片 */
@@ -208,6 +212,7 @@ switch ($action) {
 	case 'catchimage':
 		$type=1;
 		$result = include("action_crawler.php");
+		$result = Ue_File_Url($action,$result);
 		break;
 
 	default:
@@ -230,8 +235,7 @@ if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$ac
 	$title    = RepPostStr(trim($file_r[title]));
 	$filesize = (int)$file_r[size];
 	$filepath = date("Y-m-d");
-	$username = RepPostStr(trim($username));
-	$loginin  = $isadmin?$username:'[Member]'.$username;        
+	$username = RepPostStr(trim($loginin));
 	$classid  = (int)$classid;
 	$original = RepPostStr(trim($file_r[original]));
 	$type     = (int)$type;
@@ -259,21 +263,40 @@ function Ue_Print($msg="SUCCESS"){
     $empire=null;
     exit();
 }
+
+// 修正附件绝对路径
+function Ue_File_Url($action,$result){
+	global $public_r;
+	$result = json_decode($result,true);
+	if($action=='catchimage') //保存远程图片
+	{
+		for($i;$i<count($result['list']);$i++)
+		{
+			$result['list'][$i]['url']=$public_r['newsurl'].$result['list'][$i]['url'];
+		}
+	}
+	else
+	{
+		$result['url']=$public_r['newsurl'].$result['url'];
+	}
+	return json_encode($result);
+}
 // 列出已经上传的文件
 function action_list($classid,$username){
-	global $empire,$public_r,$class_r,$dbtbpre;
+	global $empire,$public_r,$class_r,$dbtbpre,$public_r;
 	$action=$_GET['action'];
+	$classid= (int)$_GET['classid'];
 	$list=array();
 	$result = json_encode(array("state" => "no match file","list" => $list,"start" => 0,"total" => 0));
 	
-	$where = '';
+	$where = "";
 	if($action=='listimage') //图片 
 	{
-		$where = ' and type=1';
+		$where= ' and type=1';
 	}
 	else if($action=='listfile') //附件
 	{
-		$where = ' and type!=1';
+		$where= ' and type!=1';
 	}
 	else
 	{
@@ -288,8 +311,8 @@ function action_list($classid,$username){
 	$bqno=0;
 	while($r=$empire->fetch($sql))
 	{
-		$classpath = ReturnFileSavePath($classid);
-		$list[$bqno]['url'] = '/'.$classpath['filepath'].$r['path'].'/'.$r['filename'];
+		$classpath = ReturnFileSavePath($r['classid']);
+		$list[$bqno]['url'] = $public_r['newsurl'].$classpath['filepath'].$r['path'].'/'.$r['filename'];
 		$list[$bqno]['mtime'] =$r['filetime'];
 		$bqno++;
 	}
