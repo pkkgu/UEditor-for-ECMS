@@ -211,8 +211,43 @@ switch ($action) {
 	/* 抓取远程文件 */
 	case 'catchimage':
 		$type=1;
-		$result = include("action_crawler.php");
-		$result = Ue_File_Url($action,$result);
+		include("Uploader.class.php");
+		/* 上传配置 */
+		$config = array(
+			"pathFormat" => $CONFIG['catcherPathFormat'],
+			"maxSize" => $CONFIG['catcherMaxSize'],
+			"allowFiles" => $CONFIG['catcherAllowFiles'],
+			"oriName" => "remote.png"
+		);
+		$fieldName = $CONFIG['catcherFieldName'];
+		
+		/* 抓取远程图片 */
+		$list = array();
+		if (isset($_POST[$fieldName])) {
+			$source = $_POST[$fieldName];
+		} else {
+			$source = $_GET[$fieldName];
+		}
+		foreach ($source as $imgUrl) {
+			$item = new Uploader($imgUrl, $config, "remote");
+			$info = $item->getFileInfo();
+			array_push($list, array(
+				"state" => $info["state"],
+				"url" => $public_r['newsurl'].$info["url"],
+				"size" => $info["size"],
+				"title" => $info["title"],
+				"original" => $info["original"],
+				"source" => $imgUrl
+			));
+		}
+		/* 返回抓取数据 */
+		$result = json_encode(array(
+			'state'=> count($list) ? 'SUCCESS':'ERROR',
+			'list'=> $list
+		));
+
+		//$result = include("action_crawler.php");
+		//$result = Ue_File_Url($action,$result);
 		break;
 
 	default:
@@ -229,7 +264,7 @@ switch ($action) {
  * 4.文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
  *
  */
-if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile"||$action=="catchimage")
+if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile") //||$action=="catchimage"
 {
 	$file_r   = json_decode($result,true);
 	$filepath = date("Y-m-d");
