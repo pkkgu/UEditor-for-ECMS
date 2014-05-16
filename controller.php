@@ -1,10 +1,10 @@
 <?php
 /**
- * ECMS for UEditor 所有附件上传处理文件
+ * ECMS for UEditor 前后端互交上传处理文件
  * User: pkkgu 910111100@qq.com
- * Date: 2014年5月10日
+ * Date: 2014年5月16日
  * ECMS 7.0
- * UEditor 1.4.0 develop
+ * UEditor 1.4.0
  *
  * @param $classid   int
  * @param $filepass  int    增加信息时为时间戳，修改信息为信息ID
@@ -21,10 +21,9 @@
 	<?php if(!isset($Field)){ ?>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
-	<script type="text/javascript" src="/e/extend/ueditor/lang/zh-cn/zh-cn.js"></script>
 	<?php } ?>
 	<?php
-	$Field    = 'newstext';
+	$Field    = 'newstext'; // *字段名称
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
 	$isadmin  = 0;
 	if($enews=='AddNews'||$enews=='EditNews')
@@ -34,10 +33,10 @@
 	?>
 	<script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
 	<script type="text/javascript">
-	var editor = UE.getEditor('<?=$Field?>',{
-			pageBreakTag:'[!--empirenews.page--]' // 分页符
-			//，toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold','test']] //选择自己需要的工具按钮名称
-		});
+	var ue = UE.getEditor('<?=$Field?>',{
+		pageBreakTag:'[!--empirenews.page--]' // 分页符
+		//,toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']] //选择自己需要的工具按钮名称
+	});
 	ue.ready(function(){
 		ue.execCommand('serverparam', {
 			'classid' : '<?=$classid?>',
@@ -56,21 +55,19 @@ require("../../../data/dbcache/class.php");
 
 $link=db_connect(); //连接MYSQL
 $empire=new mysqlquery(); //声明数据库操作类
-$editor=1; //声明目录层次
 
 // 必须参数
-$action      = $_GET['action'];
+$action      = RepPostVar($_GET['action']);
 $classid     = (int)$_GET['classid'];
 $filepass    = (int)$_GET['filepass'];
-$isadmin     = (int)$_GET['isadmin']; // 0前台 1后台
+// 用户信息
+$isadmin     = (int)$_GET['isadmin'];
 $userid      = (int)$_GET['userid'];
 $username    = RepPostVar($_GET['username']);
 $rnd         = RepPostVar($_GET['rnd']);
 $loginin     = $isadmin?$username:'[Member]'.$username;
-
 // 配置
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
-
 if(empty($action))
 {
     Ue_Print('请求类型不能明确');
@@ -148,11 +145,11 @@ else if($isadmin==1) // 重定义后台配置
 		Ue_Print("请重新未登录");
 	}
     $filesize = $pr['filesize']*1024;
-    $CONFIG['imageMaxSize'] = $filesize;
-    $CONFIG['scrawlMaxSize'] = $filesize;
+    $CONFIG['imageMaxSize']   = $filesize;
+    $CONFIG['scrawlMaxSize']  = $filesize;
     $CONFIG['catcherMaxSize'] = $filesize;
-    $CONFIG['fileMaxSize'] = $filesize;
-    $CONFIG['videoMaxSize'] = $filesize;
+    $CONFIG['fileMaxSize']    = $filesize;
+    $CONFIG['videoMaxSize']   = $filesize;
 }
 
 //目录
@@ -163,9 +160,9 @@ $CONFIG['imagePathFormat']  = $timepath;
 $CONFIG['scrawlPathFormat'] = $timepath;
 $CONFIG['videoPathFormat']  = $timepath;
 $CONFIG['filePathFormat']   = $timepath;
+$CONFIG['catcherPathFormat']= $timepath;
 //$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
 //$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
-$CONFIG['catcherPathFormat']= $timepath;
 
 switch ($action) {
 	case 'config':
