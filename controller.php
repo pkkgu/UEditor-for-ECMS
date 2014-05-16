@@ -23,7 +23,7 @@
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 	<?php } ?>
 	<?php
-	$Field    = 'newstext'; //*字段名称
+	$Field    = 'newstext'; // *字段名称
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
 	$isadmin  = 0;
 	if($enews=='AddNews'||$enews=='EditNews')
@@ -229,22 +229,40 @@ switch ($action) {
  * 4.文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
  *
  */
-$file_r   = json_decode($result,true);
-if(($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile")&&$file_r['state']=="SUCCESS")
+if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile"||$action=="catchimage")
 {
-	$title    = RepPostStr(trim($file_r[title]));
-	$filesize = (int)$file_r[size];
+	$file_r   = json_decode($result,true);
 	$filepath = date("Y-m-d");
 	$username = RepPostStr(trim($loginin));
 	$classid  = (int)$classid;
-	$original = RepPostStr(trim($file_r[original]));
 	$type     = (int)$type;
 	$filepass = (int)$filepass;
-	eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
+	if($action=="catchimage") //远程保存
+	{
+		for($i=0;$i<count($file_r['list']);$i++)
+		{
+			if($file_r['list'][$i]['state']=="SUCCESS")
+			{
+				$title    = RepPostStr(trim($file_r['list'][$i]['title']));
+				$filesize = RepPostStr(trim($file_r['list'][$i]['size']));
+				$original = RepPostStr(trim($file_r['list'][$i]['original']));
+				eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
+			}
+		}
+	}
+	else if($file_r['state']=="SUCCESS")
+	{
+		$title    = RepPostStr(trim($file_r[title]));
+		$filesize = RepPostStr(trim($file_r[size]));
+		$original = RepPostStr(trim($file_r[original]));
+		eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
+	}
 	// 反馈附件入库
 	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
 }
-
+else if($action=="catchimage"&&$file_r['state']=="SUCCESS")
+{
+}
 /* 输出结果 */
 if (isset($_GET["callback"])) {
     echo $_GET["callback"] . '(' . $result . ')';
@@ -270,7 +288,7 @@ function Ue_File_Url($action,$result){
 	$result = json_decode($result,true);
 	if($action=='catchimage') //保存远程图片
 	{
-		for($i;$i<count($result['list']);$i++)
+		for($i=0;$i<count($result['list']);$i++)
 		{
 			$result['list'][$i]['url']=$public_r['newsurl'].$result['list'][$i]['url'];
 		}
