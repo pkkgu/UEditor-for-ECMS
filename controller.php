@@ -4,7 +4,7 @@
  * User: pkkgu 910111100@qq.com
  * Date: 2014年5月16日
  * ECMS 7.0
- * UEditor 1.4.0
+ * UEditor 1.4.2
  *
  * @param $classid   int
  * @param $filepass  int    增加信息时为时间戳，修改信息为信息ID
@@ -161,8 +161,8 @@ $CONFIG['scrawlPathFormat'] = $timepath;
 $CONFIG['videoPathFormat']  = $timepath;
 $CONFIG['filePathFormat']   = $timepath;
 $CONFIG['catcherPathFormat']= $timepath;
-//$CONFIG['imageManagerListPath'] = "/".$classpath['filepath'];
-//$CONFIG['fileManagerListPath']  = "/".$classpath['filepath'];
+//$CONFIG['imageManagerListPath'] = $public_r['newsurl'].$classpath['filepath'];
+//$CONFIG['fileManagerListPath']  = $public_r['newsurl'].$classpath['filepath'];
 
 switch ($action) {
 	case 'config':
@@ -295,9 +295,6 @@ if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$act
 	// 反馈附件入库
 	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
 }
-else if($action=="catchimage"&&$file_r['state']=="SUCCESS")
-{
-}
 /* 输出结果 */
 if (isset($_GET["callback"])) {
     echo $_GET["callback"] . '(' . $result . ')';
@@ -316,7 +313,6 @@ function Ue_Print($msg="SUCCESS"){
     $empire=null;
     exit();
 }
-
 // 修正附件绝对路径
 function Ue_File_Url($action,$result){
 	global $public_r;
