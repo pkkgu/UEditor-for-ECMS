@@ -48,6 +48,6 @@ ue.ready(function(){
 
 ### 说明
 - controller.php 后端处理文件
-- Field_html.php 帝国CMS字端HTML
-- 目前只支持utf-8编码
+- Field_html.php 帝国CMS字段HTML
+- GBK版本需要服务器支持iconv函数（GBK）
 - 附件地址目录已经整合帝国系统的配置
