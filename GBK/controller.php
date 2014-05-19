@@ -265,7 +265,7 @@ switch ($action) {
  * 4.文件存放目录方式:0为栏目目录，1为/d/file/p目录，2为/d/file目录
  *
  */
-if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile") //||$action=="catchimage"
+if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile"||$action=="catchimage")
 {
 	$file_r   = json_decode($result,true);
 	$filepath = date("Y-m-d");
