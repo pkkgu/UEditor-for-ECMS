@@ -57,13 +57,10 @@ $link=db_connect(); //连接MYSQL
 $empire=new mysqlquery(); //声明数据库操作类
 
 /* 重定义请求类型（临时解决方案） */
-$isadmin     = RepPostVar($_GET['isadmin']);
-$action      = explode("=",$isadmin);
-$action      = $action[1];
-$_GET['action'] = RepPostVar($action);
-
-$isadmin = explode("?",$isadmin);
-$isadmin = (int)$isadmin[0];
+$set     = explode("?action=",RepPostVar($_GET['isadmin']));
+$action  = RepPostVar($set[1]);
+$isadmin = (int)$set[0];
+$_GET['action']  = $action;
 $_GET['isadmin'] = $isadmin;
 /* 重定义请求类型（临时解决方案） */
 
