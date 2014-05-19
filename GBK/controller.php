@@ -56,6 +56,17 @@ require("../../../data/dbcache/class.php");
 $link=db_connect(); //连接MYSQL
 $empire=new mysqlquery(); //声明数据库操作类
 
+/* 重定义请求类型（临时解决方案） */
+$isadmin     = RepPostVar($_GET['isadmin']);
+$action      = explode("=",$isadmin);
+$action      = $action[1];
+$_GET['action'] = RepPostVar($action);
+
+$isadmin = explode("?",$isadmin);
+$isadmin = (int)$isadmin[0];
+$_GET['isadmin'] = $isadmin;
+/* 重定义请求类型（临时解决方案） */
+
 // 必须参数
 $action      = RepPostVar($_GET['action']);
 $classid     = (int)$_GET['classid'];
@@ -81,38 +92,41 @@ else if($action!='config'&&(empty($classid)||empty($filepass)))
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
 if(empty($isadmin)) // 重定义前台配置
 {
-    if($pr['addnews_ok']==1)
-    {
-        Ue_Print("网站投稿功能未开启");
-    }
-    else if(($action=='uploadimage'||$action=='uploadscrawl'||$action=='catchimage')&&empty($pr['qaddtran']))
-    {
-        Ue_Print("图片上传功能关闭");
-    }
-    else if(($action=='uploadvideo'||$action=='uploadfile')&&empty($pr['qaddtranfile']))
-    {
-        Ue_Print("附件上传功能关闭");
-    }
-	
-	$cr=$empire->fetch1("select openadd,qaddgroupid from {$dbtbpre}enewsclass where classid='$classid'");
-	if($cr['openadd']==1)
+    if($action!='config')
 	{
-        Ue_Print("栏目关闭投稿功能");
-	}
-	else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //list文件、上传权限检测
-	{
-		if(empty($userid)||empty($username)||empty($rnd))
+		if($pr['addnews_ok']==1)
 		{
-			Ue_Print("请未登录");
+			Ue_Print("网站投稿功能未开启");
 		}
-		$ur=$empire->fetch1("select userid,groupid from {$dbtbpre}enewsmember where userid='$userid' and username='$username' and rnd='$rnd'");
-		if(empty($ur['userid']))
+		else if(($action=='uploadimage'||$action=='uploadscrawl'||$action=='catchimage')&&empty($pr['qaddtran']))
 		{
-			Ue_Print("请重新未登录");
+			Ue_Print("图片上传功能关闭");
 		}
-		if ($cr['qaddgroupid']&&!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
+		else if(($action=='uploadvideo'||$action=='uploadfile')&&empty($pr['qaddtranfile']))
 		{
-			Ue_Print("您没有上传附件的权限");
+			Ue_Print("附件上传功能关闭");
+		}
+		
+		$cr=$empire->fetch1("select openadd,qaddgroupid from {$dbtbpre}enewsclass where classid='$classid'");
+		if($cr['openadd']==1)
+		{
+			Ue_Print("栏目关闭投稿功能");
+		}
+		else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //list文件、上传权限检测
+		{
+			if(empty($userid)||empty($username)||empty($rnd))
+			{
+				Ue_Print("请未登录");
+			}
+			$ur=$empire->fetch1("select userid,groupid from {$dbtbpre}enewsmember where userid='$userid' and username='$username' and rnd='$rnd'");
+			if(empty($ur['userid']))
+			{
+				Ue_Print("请重新未登录");
+			}
+			if ($cr['qaddgroupid']&&!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
+			{
+				Ue_Print("您没有上传附件的权限");
+			}
 		}
 	}
     $qaddtransize = $pr['qaddtransize']*1024;
@@ -136,14 +150,17 @@ if(empty($isadmin)) // 重定义前台配置
 }
 else if($isadmin==1) // 重定义后台配置
 {
-	if(empty($userid)||empty($username)||empty($rnd))
+    if($action!='config')
 	{
-		Ue_Print("请未登录");
-	}
-	$ur=$empire->fetch1("select userid from {$dbtbpre}enewsuser where userid='$userid' and username='$username' and rnd='$rnd'");
-	if(empty($ur['userid']))
-	{
-		Ue_Print("请重新未登录");
+		if(empty($userid)||empty($username)||empty($rnd))
+		{
+			Ue_Print("请未登录");
+		}
+		$ur=$empire->fetch1("select userid from {$dbtbpre}enewsuser where userid='$userid' and username='$username' and rnd='$rnd'");
+		if(empty($ur['userid']))
+		{
+			Ue_Print("请重新未登录");
+		}
 	}
     $filesize = $pr['filesize']*1024;
     $CONFIG['imageMaxSize']   = $filesize;
