@@ -45,13 +45,15 @@ ue.ready(function(){
 });
 </script>
 ```
+![部署成功](_images/ECMS-for-UEditor.jpg)
 
 #编辑内容展示
 - 修改内容模板加入下面代码
-```js
+```javascript
 <script src="/e/extend/ueditor/ueditor.parse.js"></script>
 <script>uParse('#text', {rootPath: '/e/extend/ueditor/'})</script>
 ```
+![部署成功](_images/show_temp.jpg)
 
 ### 说明
 - controller.php 后端处理文件
