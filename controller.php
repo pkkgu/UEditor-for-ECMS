@@ -346,7 +346,7 @@ function Ue_File_Url($action,$result){
 }
 // 列出已经上传的文件
 function action_list($classid,$username){
-	global $empire,$public_r,$class_r,$dbtbpre,$public_r;
+	global $empire,$class_r,$dbtbpre,$public_r;
 	$action=$_GET['action'];
 	$classid= (int)$_GET['classid'];
 	$list=array();

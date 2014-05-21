@@ -46,8 +46,15 @@ ue.ready(function(){
 </script>
 ```
 
+#编辑内容展示
+- 修改内容模板加入下面代码
+```js
+<script src="/e/extend/ueditor/ueditor.parse.js"></script>
+<script>uParse('#text', {rootPath: '/e/extend/ueditor/'})</script>
+```
+
 ### 说明
 - controller.php 后端处理文件
 - Field_html.php 帝国CMS字段HTML
-- GBK版本需要服务器支持iconv函数（GBK）
+- GBK版本需要服务器支持iconv函数
 - 附件地址目录已经整合帝国系统的配置
