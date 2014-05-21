@@ -50,7 +50,7 @@ ue.ready(function(){
 #编辑内容展示
 - 修改内容模板加入下面代码（注意：#text为内容容器ID）
 ```javascript
-<script src="/e/extend/ueditor/ueditor.parse.js"></script>
+<script src="/e/extend/ueditor/ueditor.parse.min.js"></script>
 <script>uParse('#text', {rootPath: '/e/extend/ueditor/'})</script>
 ```
 ![部署成功](_images/show_temp.jpg)
