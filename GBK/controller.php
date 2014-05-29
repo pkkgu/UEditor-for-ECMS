@@ -2,9 +2,9 @@
 /**
  * ECMS for UEditor 前后端互交上传处理文件
  * User: pkkgu 910111100@qq.com
- * Date: 2014年5月16日
+ * Date: 2014年5月29日
  * ECMS 7.0
- * UEditor 1.4.2
+ * UEditor 1.4.3
  *
  * @param $classid   int
  * @param $filepass  int    增加信息时为时间戳，修改信息为信息ID
@@ -54,15 +54,7 @@ require('../../../class/db_sql.php'); //引入数据库操作文件
 require("../../../data/dbcache/class.php");
 
 $link=db_connect(); //连接MYSQL
-$empire=new mysqlquery(); //声明数据库操作类
-
-/* 重定义请求类型（临时解决方案） */
-$set     = explode("?action=",RepPostVar($_GET['isadmin']));
-$action  = RepPostVar($set[1]);
-$isadmin = (int)$set[0];
-$_GET['action']  = $action;
-$_GET['isadmin'] = $isadmin;
-/* 重定义请求类型（临时解决方案） */
+$empire=new mysqlquery(); //声明数据库操作
 
 // 必须参数
 $action      = RepPostVar($_GET['action']);
@@ -72,18 +64,18 @@ $filepass    = (int)$_GET['filepass'];
 $isadmin     = (int)$_GET['isadmin'];
 $userid      = (int)$_GET['userid'];
 $username    = RepPostVar($_GET['username']);
-$rnd         = RepPostVar($_GET['rnd']);
 $username    = iconv("UTF-8","GB2312//IGNORE",$username);
+$rnd         = RepPostVar($_GET['rnd']);
 $loginin     = $isadmin?$username:'[Member]'.$username;
-// 配置
 $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("config.json")), true);
+
 if(empty($action))
 {
     Ue_Print('请求类型不能明确');
 }
 else if($action!='config'&&(empty($classid)||empty($filepass)))
 {
-    Ue_Print("上传参数不正确！栏目ID：$classid，信息ID：$filepass，action：$action");
+    Ue_Print("上传参数不正确！栏目ID：".$classid."，信息ID：".$filepass."，action：".$action);
 }
 //获取配置
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
@@ -163,19 +155,28 @@ else if($isadmin==1) // 重定义后台配置
     $CONFIG['imageMaxSize']   = $filesize;
     $CONFIG['scrawlMaxSize']  = $filesize;
     $CONFIG['catcherMaxSize'] = $filesize;
-    $CONFIG['fileMaxSize']    = $filesize;
     $CONFIG['videoMaxSize']   = $filesize;
+    $CONFIG['fileMaxSize']    = $filesize;
 }
 
 //目录
 $classpath = ReturnFileSavePath($classid); //栏目附件目录
 $timepath  = $classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //日期栏目目录
 // 重定义存放目录
-$CONFIG['imagePathFormat']  = $timepath;
-$CONFIG['scrawlPathFormat'] = $timepath;
-$CONFIG['videoPathFormat']  = $timepath;
-$CONFIG['filePathFormat']   = $timepath;
-$CONFIG['catcherPathFormat']= $timepath;
+$CONFIG['imagePathFormat']      = $timepath;
+$CONFIG['scrawlPathFormat']     = $timepath;
+$CONFIG['snapscreenPathFormat'] = $timepath;
+$CONFIG['videoPathFormat']      = $timepath;
+$CONFIG['filePathFormat']       = $timepath;
+$CONFIG['catcherPathFormat']    = $timepath;
+// 前缀补全
+$CONFIG['imageUrlPrefix']       = $public_r['newsurl'];
+$CONFIG['scrawlUrlPrefix']      = $public_r['newsurl'];
+$CONFIG['snapscreenUrlPrefix']  = $public_r['newsurl'];
+$CONFIG['catcherUrlPrefix']     = $public_r['newsurl'];
+$CONFIG['videoUrlPrefix']       = $public_r['newsurl'];
+$CONFIG['fileUrlPrefix']        = $public_r['newsurl'];
+
 //$CONFIG['imageManagerListPath'] = $public_r['newsurl'].$classpath['filepath'];
 //$CONFIG['fileManagerListPath']  = $public_r['newsurl'].$classpath['filepath'];
 
@@ -188,28 +189,24 @@ switch ($action) {
 	case 'uploadimage':
 		$type=1;
 		$result = include("action_upload.php");
-		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传涂鸦 */
 	case 'uploadscrawl':
 		$type=1;
 		$result = include("action_upload.php");
-		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传视频 */
 	case 'uploadvideo':
 		$type=3;
 		$result = include("action_upload.php");
-		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 上传文件 */
 	case 'uploadfile':
 		$type=0;
 		$result = include("action_upload.php");
-		$result = Ue_File_Url($action,$result);
 		break;
 
 	/* 列出图片 */
@@ -226,50 +223,13 @@ switch ($action) {
 	/* 抓取远程文件 */
 	case 'catchimage':
 		$type=1;
-		include("Uploader.class.php");
-		/* 上传配置 */
-		$config = array(
-			"pathFormat" => $CONFIG['catcherPathFormat'],
-			"maxSize" => $CONFIG['catcherMaxSize'],
-			"allowFiles" => $CONFIG['catcherAllowFiles'],
-			"oriName" => "remote.png"
-		);
-		$fieldName = $CONFIG['catcherFieldName'];
-		
-		/* 抓取远程图片 */
-		$list = array();
-		if (isset($_POST[$fieldName])) {
-			$source = $_POST[$fieldName];
-		} else {
-			$source = $_GET[$fieldName];
-		}
-		foreach ($source as $imgUrl) {
-			$item = new Uploader($imgUrl, $config, "remote");
-			$info = $item->getFileInfo();
-			array_push($list, array(
-				"state" => $info["state"],
-				"url" => $public_r['newsurl'].$info["url"],
-				"size" => $info["size"],
-				"title" => $info["title"],
-				"original" => $info["original"],
-				"source" => $imgUrl
-			));
-		}
-		/* 返回抓取数据 */
-		$result = json_encode(array(
-			'state'=> count($list) ? 'SUCCESS':'ERROR',
-			'list'=> $list
-		));
+		$result = include("action_crawler.php");
+        break;
 
-		//$result = include("action_crawler.php");
-		//$result = Ue_File_Url($action,$result);
-		break;
-
-	default:
+    default:
 		$result = json_encode(array('state'=> '请求地址出错'));
-		break;
+        break;
 }
-
 /*
  * 写入数据库
  * eInsertFileTable(文件名、文件大小，存放日期目录，上传者，栏目id,文件编号,文件类型,信息ID,文件临时识别编号(原文件名称),文件存放目录方式,信息公共ID,归属类型,附件副表ID)
@@ -287,8 +247,7 @@ if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$act
 	$classid  = (int)$classid;
 	$type     = (int)$type;
 	$filepass = (int)$filepass;
-	
-	if($action=="catchimage") //远程保存
+	if($action=="catchimage") //远程保存写数据库
 	{
 		for($i=0;$i<count($file_r['list']);$i++)
 		{
@@ -313,9 +272,14 @@ if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$act
 	// 反馈附件入库
 	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
 }
+
 /* 输出结果 */
 if (isset($_GET["callback"])) {
-    echo $_GET["callback"] . '(' . $result . ')';
+    if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
+        echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
+    } else {
+        echo json_encode(array('state'=> 'callback参数不合法'));
+    }
 } else {
     echo $result;
 }
@@ -331,32 +295,13 @@ function Ue_Print($msg="SUCCESS"){
     $empire=null;
     exit();
 }
-
-// 修正附件绝对路径
-function Ue_File_Url($action,$result){
-	global $public_r;
-	$result = json_decode($result,true);
-	if($action=='catchimage') //保存远程图片
-	{
-		for($i=0;$i<count($result['list']);$i++)
-		{
-			$result['list'][$i]['url']=$public_r['newsurl'].$result['list'][$i]['url'];
-		}
-	}
-	else
-	{
-		$result['url']=$public_r['newsurl'].$result['url'];
-	}
-	return json_encode($result);
-}
 // 列出已经上传的文件
 function action_list($classid,$username){
-	global $empire,$public_r,$class_r,$dbtbpre;
+	global $empire,$class_r,$dbtbpre,$public_r;
 	$action=$_GET['action'];
 	$classid= (int)$_GET['classid'];
 	$list=array();
 	$result = json_encode(array("state" => "no match file","list" => $list,"start" => 0,"total" => 0));
-	
 	$where = "";
 	if($action=='listimage') //图片 
 	{
@@ -385,9 +330,7 @@ function action_list($classid,$username){
 		$bqno++;
 	}
 	/* 返回数据 */
-	if (!count($list)) {
-		return $result;
-	}
+	if (!count($list)) { return $result; }
 	return $result = json_encode(array(
 		"state" => "SUCCESS",
 		"list" => $list,
