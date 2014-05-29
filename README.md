@@ -8,7 +8,7 @@ ECMS-for-UEditor
 - 下载UEditor编辑器 http://ueditor.baidu.com/website/download.html
 - 上传到帝国/e/extend/目录下
 - 使用本项目上的controller.php文件，替换编辑器自带的PHP文件（目录/e/extend/ueditor/php/controller.php）
-- 修改帝国编辑器字段HTML，替换为以下代码
+- 修改帝国CMS字段HTML，替换为以下代码 [[字段管理方法]](http://www.phome.net/doc/manual/mod/html/field.html "帝国CMS字段管理方法")
 ```php
 <?php if(!isset($Field)){ ?>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
