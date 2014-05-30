@@ -1,7 +1,7 @@
 UEditor for ECMS
 ================
 
-百度编辑器UEditor 1.4.3 深度整合 帝国ECMS7.0 
+百度编辑器UEditor 1.4.3 深度整合 帝国ECMS7.0  
 
 ### 使用说明
 
