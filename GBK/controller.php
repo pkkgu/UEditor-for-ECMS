@@ -1,33 +1,29 @@
 <?php
 /**
-<<<<<<< HEAD
  * UEditor for ECMS Ç°ºó¶Ë»¥½»ÉÏ´«´¦ÀíÎÄ¼þ
-=======
- * UEditor for ECMS Ç°ï¿½ï¿½Ë»ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
->>>>>>> 8e109d5702206c4797fcebef22b56453e4e16768
  * User: pkkgu 910111100@qq.com
- * Date: 2014ï¿½ï¿½5ï¿½ï¿½29ï¿½ï¿½
- * ECMS 7.0
- * UEditor 1.4.3
+ * Date: 2014Äê5ÔÂ29ÈÕ
+ * ECMS 7.0 
+ * UEditor 1.4.3 
  *
  * @param $classid   int
- * @param $filepass  int    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢Ê±ÎªÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½Ï¢Îªï¿½ï¿½Ï¢ID
- * @param $isadmin   int    Ç°ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½,0Ç°Ì¨ï¿½ï¿½1ï¿½ï¿½Ì¨
+ * @param $filepass  int    Ôö¼ÓÐÅÏ¢Ê±ÎªÊ±¼ä´Á£¬ÐÞ¸ÄÐÅÏ¢ÎªÐÅÏ¢ID
+ * @param $isadmin   int    Ç°ºóÌ¨¿ØÖÆ,0Ç°Ì¨¡¢1ºóÌ¨
  * @param $userid    int
  * @param $username  string
  * @param $rnd       string
  *
- * @param $Field     string ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
- * @param $FieldVal  string ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
+ * @param $Field     string ×Ö¶ÎÃû³Æ
+ * @param $FieldVal  string ×Ö¶ÎÄÚÈÝ
  *
 	
-	ï¿½Û¹ï¿½ï¿½ï¿½ï¿½Ý±ï¿½ ï¿½Ö¶ï¿½HTML
+	µÛ¹úÊý¾Ý±í ×Ö¶ÎHTML
 	<?php if(!isset($Field)){ ?>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
 	<?php } ?>
 	<?php
-	$Field    = 'newstext'; //*ï¿½Ö¶ï¿½ï¿½ï¿½ï¿½ï¿½
+	$Field    = 'newstext'; //*×Ö¶ÎÃû³Æ
 	$FieldVal = $ecmsfirstpost==1?"":stripSlashes($r[$Field]);
 	$isadmin  = 0;
 	if($enews=='AddNews'||$enews=='EditNews')
@@ -38,9 +34,9 @@
 	<script id="<?=$Field?>" name="<?=$Field?>" type="text/plain"><?=$FieldVal?></script>
 	<script type="text/javascript">
 	var ue = UE.getEditor('<?=$Field?>',{
-		pageBreakTag:'[!--empirenews.page--]' //ï¿½ï¿½Ò³ï¿½ï¿½
+		pageBreakTag:'[!--empirenews.page--]' //·ÖÒ³·û
 		, serverUrl: "/e/extend/ueditor/php/controller.php?isadmin=<?=$isadmin?>"
-		//,toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']] //Ñ¡ï¿½ï¿½ï¿½Ô¼ï¿½ï¿½ï¿½Òªï¿½Ä¹ï¿½ï¿½ß°ï¿½Å¥ï¿½ï¿½ï¿½ï¿½
+		//,toolbars:[['FullScreen', 'Source', 'Undo', 'Redo','Bold']] //Ñ¡Ôñ×Ô¼ºÐèÒªµÄ¹¤¾ß°´Å¥Ãû³Æ
 	});
 	ue.ready(function(){
 		ue.execCommand('serverparam', {
@@ -53,18 +49,18 @@
 	});
 	</script>
  */
-require('../../../class/connect.php'); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
-require('../../../class/db_sql.php'); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+require('../../../class/connect.php'); //ÒýÈëÊý¾Ý¿âÅäÖÃÎÄ¼þºÍ¹«¹²º¯ÊýÎÄ¼þ
+require('../../../class/db_sql.php'); //ÒýÈëÊý¾Ý¿â²Ù×÷ÎÄ¼þ
 require("../../../data/dbcache/class.php");
 
-$link=db_connect(); //ï¿½ï¿½ï¿½ï¿½MYSQL
-$empire=new mysqlquery(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½ï¿½ï¿½ï¿½
+$link=db_connect(); //Á¬½ÓMYSQL
+$empire=new mysqlquery(); //ÉùÃ÷Êý¾Ý¿â²Ù×÷
 
-// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ±ØÐë²ÎÊý
 $action      = RepPostVar($_GET['action']);
 $classid     = (int)$_GET['classid'];
 $filepass    = (int)$_GET['filepass'];
-// ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
+// ÓÃ»§ÐÅÏ¢
 $isadmin     = (int)$_GET['isadmin'];
 $userid      = (int)$_GET['userid'];
 $username    = RepPostVar($_GET['username']);
@@ -75,50 +71,50 @@ $CONFIG = json_decode(preg_replace("/\/\*[\s\S]+?\*\//", "", file_get_contents("
 
 if(empty($action))
 {
-    Ue_Print('ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í²ï¿½ï¿½ï¿½ï¿½ï¿½È·');
+    Ue_Print('ÇëÇóÀàÐÍ²»ÄÜÃ÷È·');
 }
 else if($action!='config'&&(empty($classid)||empty($filepass)))
 {
-    Ue_Print("ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½Ä¿IDï¿½ï¿½".$classid."ï¿½ï¿½ï¿½ï¿½Ï¢IDï¿½ï¿½".$filepass."ï¿½ï¿½actionï¿½ï¿½".$action);
+    Ue_Print("ÉÏ´«²ÎÊý²»ÕýÈ·£¡À¸Ä¿ID£º".$classid."£¬ÐÅÏ¢ID£º".$filepass."£¬action£º".$action);
 }
-//ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+//»ñÈ¡ÅäÖÃ
 $pr=$empire->fetch1("select * from {$dbtbpre}enewspublic");
-if(empty($isadmin)) // ï¿½Ø¶ï¿½ï¿½ï¿½Ç°Ì¨ï¿½ï¿½ï¿½ï¿½
+if(empty($isadmin)) // ÖØ¶¨ÒåÇ°Ì¨ÅäÖÃ
 {
     if($action!='config')
 	{
 		if($pr['addnews_ok']==1)
 		{
-			Ue_Print("ï¿½ï¿½Õ¾Í¶ï¿½å¹¦ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½");
+			Ue_Print("ÍøÕ¾Í¶¸å¹¦ÄÜÎ´¿ªÆô");
 		}
 		else if(($action=='uploadimage'||$action=='uploadscrawl'||$action=='catchimage')&&empty($pr['qaddtran']))
 		{
-			Ue_Print("Í¼Æ¬ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Ü¹Ø±ï¿½");
+			Ue_Print("Í¼Æ¬ÉÏ´«¹¦ÄÜ¹Ø±Õ");
 		}
 		else if(($action=='uploadvideo'||$action=='uploadfile')&&empty($pr['qaddtranfile']))
 		{
-			Ue_Print("ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Ü¹Ø±ï¿½");
+			Ue_Print("¸½¼þÉÏ´«¹¦ÄÜ¹Ø±Õ");
 		}
 		
 		$cr=$empire->fetch1("select openadd,qaddgroupid from {$dbtbpre}enewsclass where classid='$classid'");
 		if($cr['openadd']==1)
 		{
-			Ue_Print("ï¿½ï¿½Ä¿ï¿½Ø±ï¿½Í¶ï¿½å¹¦ï¿½ï¿½");
+			Ue_Print("À¸Ä¿¹Ø±ÕÍ¶¸å¹¦ÄÜ");
 		}
-		else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //listï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ï´ï¿½È¨ï¿½Þ¼ï¿½ï¿½
+		else if($action=='listimage'||$action=='listfile'||$cr['qaddgroupid']) //listÎÄ¼þ¡¢ÉÏ´«È¨ÏÞ¼ì²â
 		{
 			if(empty($userid)||empty($username)||empty($rnd))
 			{
-				Ue_Print("ï¿½ï¿½Î´ï¿½ï¿½Â¼");
+				Ue_Print("ÇëÎ´µÇÂ¼");
 			}
 			$ur=$empire->fetch1("select userid,groupid from {$dbtbpre}enewsmember where userid='$userid' and username='$username' and rnd='$rnd'");
 			if(empty($ur['userid']))
 			{
-				Ue_Print("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½Â¼");
+				Ue_Print("ÇëÖØÐÂÎ´µÇÂ¼");
 			}
 			if ($cr['qaddgroupid']&&!stristr($cr['qaddgroupid'],",".$ur['groupid'].","))
 			{
-				Ue_Print("ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½ï¿½");
+				Ue_Print("ÄúÃ»ÓÐÉÏ´«¸½¼þµÄÈ¨ÏÞ");
 			}
 		}
 	}
@@ -141,18 +137,18 @@ if(empty($isadmin)) // ï¿½Ø¶ï¿½ï¿½ï¿½Ç°Ì¨ï¿½ï¿½ï¿½ï¿½
     $CONFIG['fileManagerAllowFiles'] = $qaddtranfiletype;
     $CONFIG['videoAllowFiles'] = array(".flv",".swf",".mkv",".avi",".rm",".rmvb",".mpeg",".mpg",".ogg",".ogv",".mov",".wmv",".mp4",".webm",".mp3",".wav",".mid");
 }
-else if($isadmin==1) // ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½
+else if($isadmin==1) // ÖØ¶¨ÒåºóÌ¨ÅäÖÃ
 {
     if($action!='config')
 	{
 		if(empty($userid)||empty($username)||empty($rnd))
 		{
-			Ue_Print("ï¿½ï¿½Î´ï¿½ï¿½Â¼");
+			Ue_Print("ÇëÎ´µÇÂ¼");
 		}
 		$ur=$empire->fetch1("select userid from {$dbtbpre}enewsuser where userid='$userid' and username='$username' and rnd='$rnd'");
 		if(empty($ur['userid']))
 		{
-			Ue_Print("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½Â¼");
+			Ue_Print("ÇëÖØÐÂÎ´µÇÂ¼");
 		}
 	}
     $filesize = $pr['filesize']*1024;
@@ -164,16 +160,16 @@ else if($isadmin==1) // ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½Ì¨ï¿½ï¿½ï¿½ï¿½
 }
 
 //Ä¿Â¼
-$classpath = ReturnFileSavePath($classid); //ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
-$timepath  = $classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Ä¿Â¼
-// ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼
+$classpath = ReturnFileSavePath($classid); //À¸Ä¿¸½¼þÄ¿Â¼
+$timepath  = $classpath['filepath']."{yyyy}-{mm}-{dd}/{time}{rand:6}"; //ÈÕÆÚÀ¸Ä¿Ä¿Â¼
+// ÖØ¶¨Òå´æ·ÅÄ¿Â¼
 $CONFIG['imagePathFormat']      = $timepath;
 $CONFIG['scrawlPathFormat']     = $timepath;
 $CONFIG['snapscreenPathFormat'] = $timepath;
 $CONFIG['videoPathFormat']      = $timepath;
 $CONFIG['filePathFormat']       = $timepath;
 $CONFIG['catcherPathFormat']    = $timepath;
-// Ç°×ºï¿½ï¿½È«
+// Ç°×º²¹È«
 $CONFIG['imageUrlPrefix']       = $public_r['newsurl'];
 $CONFIG['scrawlUrlPrefix']      = $public_r['newsurl'];
 $CONFIG['snapscreenUrlPrefix']  = $public_r['newsurl'];
@@ -189,58 +185,58 @@ switch ($action) {
 		$result = json_encode($CONFIG);
 		break;
 
-	/* ï¿½Ï´ï¿½Í¼Æ¬ */
+	/* ÉÏ´«Í¼Æ¬ */
 	case 'uploadimage':
 		$type=1;
 		$result = include("action_upload.php");
 		break;
 
-	/* ï¿½Ï´ï¿½Í¿Ñ» */
+	/* ÉÏ´«Í¿Ñ» */
 	case 'uploadscrawl':
 		$type=1;
 		$result = include("action_upload.php");
 		break;
 
-	/* ï¿½Ï´ï¿½ï¿½ï¿½Æµ */
+	/* ÉÏ´«ÊÓÆµ */
 	case 'uploadvideo':
 		$type=3;
 		$result = include("action_upload.php");
 		break;
 
-	/* ï¿½Ï´ï¿½ï¿½Ä¼ï¿½ */
+	/* ÉÏ´«ÎÄ¼þ */
 	case 'uploadfile':
 		$type=0;
 		$result = include("action_upload.php");
 		break;
 
-	/* ï¿½Ð³ï¿½Í¼Æ¬ */
+	/* ÁÐ³öÍ¼Æ¬ */
 	case 'listimage':
 		$result = action_list($classid,$username);
 		//$result = include("action_list.php");
 		break;
-	/* ï¿½Ð³ï¿½ï¿½Ä¼ï¿½ */
+	/* ÁÐ³öÎÄ¼þ */
 	case 'listfile':
 		$result = action_list($classid,$username);
 		//$result = include("action_list.php");
 		break;
 
-	/* ×¥È¡Ô¶ï¿½ï¿½ï¿½Ä¼ï¿½ */
+	/* ×¥È¡Ô¶³ÌÎÄ¼þ */
 	case 'catchimage':
 		$type=1;
 		$result = include("action_crawler.php");
         break;
 
     default:
-		$result = json_encode(array('state'=> 'ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½ï¿½'));
+		$result = json_encode(array('state'=> 'ÇëÇóµØÖ·³ö´í'));
         break;
 }
 /*
- * Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿ï¿½
- * eInsertFileTable(ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½ï¿½Ï´ï¿½ï¿½ß£ï¿½ï¿½ï¿½Ä¿id,ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½,ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ï¢ID,ï¿½Ä¼ï¿½ï¿½ï¿½Ê±Ê¶ï¿½ï¿½ï¿½ï¿½(Ô­ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½),ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½Ê½,ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½ID,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ID)
- * 1.ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½:1ÎªÍ¼Æ¬ï¿½ï¿½2ÎªFlashï¿½Ä¼ï¿½ï¿½ï¿½3Îªï¿½ï¿½Ã½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½0Îªï¿½ï¿½ï¿½ï¿½
- * 2.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:0ï¿½ï¿½Ï¢ï¿½ï¿½4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½6ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
- * 3.ï¿½Ä¼ï¿½ï¿½ï¿½Ê±Ê¶ï¿½ï¿½ï¿½ï¿½:0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
- * 4.ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä¿Â¼ï¿½ï¿½Ê½:0Îªï¿½ï¿½Ä¿Ä¿Â¼ï¿½ï¿½1Îª/d/file/pÄ¿Â¼ï¿½ï¿½2Îª/d/fileÄ¿Â¼
+ * Ð´ÈëÊý¾Ý¿â
+ * eInsertFileTable(ÎÄ¼þÃû¡¢ÎÄ¼þ´óÐ¡£¬´æ·ÅÈÕÆÚÄ¿Â¼£¬ÉÏ´«Õß£¬À¸Ä¿id,ÎÄ¼þ±àºÅ,ÎÄ¼þÀàÐÍ,ÐÅÏ¢ID,ÎÄ¼þÁÙÊ±Ê¶±ð±àºÅ(Ô­ÎÄ¼þÃû³Æ),ÎÄ¼þ´æ·ÅÄ¿Â¼·½Ê½,ÐÅÏ¢¹«¹²ID,¹éÊôÀàÐÍ,¸½¼þ¸±±íID)
+ * 1.ÎÄ¼þÀàÐÍ:1ÎªÍ¼Æ¬£¬2ÎªFlashÎÄ¼þ£¬3Îª¶àÃ½ÌåÎÄ¼þ£¬0Îª¸½¼þ
+ * 2.¹éÊôÀàÐÍ:0ÐÅÏ¢£¬4·´À¡£¬5¹«¹²£¬6»áÔ±£¬ÆäËû
+ * 3.ÎÄ¼þÁÙÊ±Ê¶±ð±àºÅ:0·ÇÀ¬»øÐÅÏ¢
+ * 4.ÎÄ¼þ´æ·ÅÄ¿Â¼·½Ê½:0ÎªÀ¸Ä¿Ä¿Â¼£¬1Îª/d/file/pÄ¿Â¼£¬2Îª/d/fileÄ¿Â¼
  *
  */
 if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$action=="uploadfile"||$action=="catchimage")
@@ -251,7 +247,7 @@ if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$act
 	$classid  = (int)$classid;
 	$type     = (int)$type;
 	$filepass = (int)$filepass;
-	if($action=="catchimage") //Ô¶ï¿½Ì±ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ý¿ï¿½
+	if($action=="catchimage") //Ô¶³Ì±£´æÐ´Êý¾Ý¿â
 	{
 		for($i=0;$i<count($file_r['list']);$i++)
 		{
@@ -273,16 +269,16 @@ if($action=="uploadimage"||$action=="uploadscrawl"||$action=="uploadvideo"||$act
 		$original = iconv("UTF-8","GB2312//IGNORE",$original);
 		eInsertFileTable($title,$filesize,$filepath,$username,$classid,$original,$type,$filepass,$filepass,$public_r[fpath],0,0,0);
 	}
-	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// ·´À¡¸½¼þÈë¿â
 	//eInsertFileTable($tfr[filename],$filesize,$filepath,'[Member]'.$username,$classid,'[FB]'.addslashes(RepPostStr($add[title])),$type,$filepass,$filepass,$public_r[fpath],0,4,0);
 }
 
-/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+/* Êä³ö½á¹û */
 if (isset($_GET["callback"])) {
     if (preg_match("/^[\w_]+$/", $_GET["callback"])) {
         echo htmlspecialchars($_GET["callback"]) . '(' . $result . ')';
     } else {
-        echo json_encode(array('state'=> 'callbackï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·ï¿½'));
+        echo json_encode(array('state'=> 'callback²ÎÊý²»ºÏ·¨'));
     }
 } else {
     echo $result;
@@ -292,14 +288,14 @@ db_close();
 $empire=null;
 exit();
 
-// Errorï¿½ï¿½Ê¾
+// ErrorÌáÊ¾
 function Ue_Print($msg="SUCCESS"){
     echo '{"state": "'.$msg.'"}';
     db_close();
     $empire=null;
     exit();
 }
-// ï¿½Ð³ï¿½ï¿½Ñ¾ï¿½ï¿½Ï´ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+// ÁÐ³öÒÑ¾­ÉÏ´«µÄÎÄ¼þ
 function action_list($classid,$username){
 	global $empire,$class_r,$dbtbpre,$public_r;
 	$action=$_GET['action'];
@@ -311,7 +307,7 @@ function action_list($classid,$username){
 	{
 		$where= ' and type=1';
 	}
-	else if($action=='listfile') //ï¿½ï¿½ï¿½ï¿½
+	else if($action=='listfile') //¸½¼þ
 	{
 		$where= ' and type!=1';
 	}
@@ -322,7 +318,7 @@ function action_list($classid,$username){
 	$size=(int)$_GET['size'];
 	$start=(int)$_GET['start'];
 	$limit=$start.",".$size;
-	// Í³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+	// Í³¼Æ×ÜÊý
 	$total=$empire->gettotal("select count(*) as total from {$dbtbpre}enewsfile_1 where adduser='$username'".$where);
 	$sql=$empire->query("select * from {$dbtbpre}enewsfile_1 where adduser='$username'".$where." limit ".$limit);
 	$bqno=0;
@@ -333,7 +329,7 @@ function action_list($classid,$username){
 		$list[$bqno]['mtime'] =$r['filetime'];
 		$bqno++;
 	}
-	/* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+	/* ·µ»ØÊý¾Ý */
 	if (!count($list)) { return $result; }
 	return $result = json_encode(array(
 		"state" => "SUCCESS",
