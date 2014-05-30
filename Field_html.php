@@ -4,7 +4,7 @@
 <?php } ?>
 <?php
 /**
- * ECMS UEditor编辑器字段配置
+ * UEditor for ECMS编辑器字段配置
  * User: pkkgu 910111100@qq.com
  */
 $Field    = 'newstext'; //*字段名称

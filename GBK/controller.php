@@ -1,6 +1,6 @@
 <?php
 /**
- * ECMS for UEditor 前后端互交上传处理文件
+ * UEditor for ECMS 前后端互交上传处理文件
  * User: pkkgu 910111100@qq.com
  * Date: 2014年5月29日
  * ECMS 7.0
