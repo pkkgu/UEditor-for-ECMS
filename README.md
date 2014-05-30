@@ -7,7 +7,7 @@ UEditor for ECMS
 
 - 下载UEditor编辑器 [[下载地址]](http://ueditor.baidu.com/website/download.html "UEditor编辑器下载地址")
 - 上传到帝国/e/extend/目录下
-- 使用本项目上的controller.php文件，替换编辑器自带的PHP文件（目录/e/extend/ueditor/php/controller.php）
+- 使用本项目上controller.php文件，替换编辑器自带的PHP文件（目录/e/extend/ueditor/php/controller.php）
 - 修改帝国CMS字段HTML，替换为以下代码 [[字段管理方法]](http://www.phome.net/doc/manual/mod/html/field.html "帝国CMS字段管理方法")
 ```php
 <?php if(!isset($Field)){ ?>
@@ -16,7 +16,7 @@ UEditor for ECMS
 <?php } ?>
 <?php
 /**
- * ECMS UEditor编辑器字段配置
+ * UEditor for ECMS编辑器字段配置
  * User: pkkgu 910111100@qq.com
  */
 $Field    = 'newstext'; //*字段名称
@@ -45,7 +45,6 @@ ue.ready(function(){
 });
 </script>
 ```
-![部署成功](_images/ECMS-for-UEditor.jpg)
 
 #编辑内容展示
 - 修改内容模板加入下面代码（注意：#text为内容容器ID）[[内容模板管理方法]](http://www.phome.net/doc/manual/template/html/newstemp.html "帝国CMS内容模板管理方法")
@@ -59,4 +58,4 @@ ue.ready(function(){
 - controller.php 后端处理文件
 - Field_html.php 帝国CMS字段HTML
 - GBK版本需要服务器支持iconv函数
-- 附件地址目录已经整合帝国系统的配置
+- 附件存放目录已经整合帝国CMS系统的配置
