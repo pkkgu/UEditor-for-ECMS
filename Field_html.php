@@ -1,6 +1,6 @@
 <?php if(!isset($Field)){ ?>
 <script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
-<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.min.js"></script>
 <?php } ?>
 <?php
 /**

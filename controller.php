@@ -20,7 +20,7 @@
 	帝国数据表 字段HTML
 	<?php if(!isset($Field)){ ?>
 	<script type="text/javascript" src="/e/extend/ueditor/ueditor.config.js"></script>
-	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.js"></script>
+	<script type="text/javascript" src="/e/extend/ueditor/ueditor.all.min.js"></script>
 	<?php } ?>
 	<?php
 	$Field    = 'newstext'; //*字段名称
