@@ -44,8 +44,8 @@ ue.ready(function(){
 	});
 });
 </script>
-``![部署成功](_images/show_temp.jpg)
--![部署成功](_images/ECMS-for-UEditor.jpg)
+```
+![部署成功](_images/ECMS-for-UEditor.jpg)
 
 #编辑内容展示
 - 修改内容模板加入下面代码（注意：#text为内容容器ID）[[内容模板管理方法]](http://www.phome.net/doc/manual/template/html/newstemp.html "帝国CMS内容模板管理方法")
