@@ -320,7 +320,7 @@ function action_list($classid,$username){
 	$limit=$start.",".$size;
 	// 统计总数
 	$total=$empire->gettotal("select count(*) as total from {$dbtbpre}enewsfile_1 where adduser='$username'".$where);
-	$sql=$empire->query("select * from {$dbtbpre}enewsfile_1 where adduser='$username'".$where." limit ".$limit);
+	$sql=$empire->query("select * from {$dbtbpre}enewsfile_1 where adduser='$username'".$where." order by fileid DESC limit ".$limit);
 	$bqno=0;
 	while($r=$empire->fetch($sql))
 	{
