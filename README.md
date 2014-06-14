@@ -5,7 +5,7 @@ UEditor for ECMS
 
 ### 使用说明
 
-- 下载UEditor编辑器 [[下载地址]](http://ueditor.baidu.com/website/download.html "UEditor编辑器下载地址")
+- 下载UEditor编辑器(PHP版) [[下载地址]](http://ueditor.baidu.com/website/download.html "UEditor编辑器下载地址")
 - 上传到帝国/e/extend/目录下
 - 使用本项目上controller.php文件，替换编辑器自带的PHP文件（目录/e/extend/ueditor/php/controller.php）
 - 修改帝国CMS字段HTML，替换为以下代码 [[字段管理方法]](http://www.phome.net/doc/manual/mod/html/field.html "帝国CMS字段管理方法")
@@ -48,10 +48,12 @@ ue.ready(function(){
 ![部署成功](_images/ECMS-for-UEditor.jpg)
 
 #编辑内容展示
-- 修改内容模板加入下面代码（注意：#text为内容容器ID）[[内容模板管理方法]](http://www.phome.net/doc/manual/template/html/newstemp.html "帝国CMS内容模板管理方法")
+- 修改内容模板加入下面代码（注意：#newstext为前台编辑器容器ID）[[内容模板管理方法]](http://www.phome.net/doc/manual/template/html/newstemp.html "帝国CMS内容模板管理方法")
 ```javascript
 <script src="/e/extend/ueditor/ueditor.parse.min.js"></script>
-<script>uParse('#text', {rootPath: '/e/extend/ueditor/'})</script>
+<script>uParse('#newstext', {rootPath: '/e/extend/ueditor/'})</script>
+<!-- 前台显示编辑器字段 -->
+<div id="newstext">[!--newstext--]</div>
 ```
 ![部署成功](_images/show_temp.jpg)
 
