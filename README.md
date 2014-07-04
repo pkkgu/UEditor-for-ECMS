@@ -1,7 +1,8 @@
 UEditor for ECMS
 ================
 
-百度编辑器UEditor 1.4.3 深度整合 帝国ECMS7.0  
+UEditor深度整合帝国ECMS。UEditor提供非常完善的后端通信API接口，使得UE编辑器整合CMS项目相当简单方便。所有图片、附件、视频等文件存放目录与后台数据记录，都延续使用ECMS的存放方式。本项将持续已插件形式更新最新的UEditor和ECMS。
+ 
 
 ### 使用说明
 
